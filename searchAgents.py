@@ -296,7 +296,6 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        # state = (ตำแหน่ง pacman, สถานะมุมทั้ง 4)
         visitedCorners = (False, False, False, False)
         return (self.startingPosition, visitedCorners)
         util.raiseNotDefined()
@@ -307,7 +306,6 @@ class CornersProblem(search.SearchProblem):
         """
         "*** YOUR CODE HERE ***"
         position, visitedCorners = state
-        # goal คือไปครบทั้ง 4 มุม
         return all(visitedCorners)
         util.raiseNotDefined()
 
@@ -346,7 +344,7 @@ class CornersProblem(search.SearchProblem):
 
                 nextState = ((nextx, nexty), tuple(newVisited))
                 successors.append((nextState, action, 1))
-        self._expanded += 1 # DO NOT CHANGE
+        self._expanded += 1
         return successors
 
     def getCostOfActions(self, actions):
@@ -396,7 +394,7 @@ def cornersHeuristic(state: Any, problem: CornersProblem):
             if dist > maxDist:
                 maxDist = dist
         return maxDist
-    return 0 # Default to trivial solution
+    return 0
 
 class AStarCornersAgent(SearchAgent):
     "A SearchAgent for FoodSearchProblem using A* and your foodHeuristic"
@@ -580,6 +578,7 @@ class AnyFoodSearchProblem(PositionSearchProblem):
 
         "*** YOUR CODE HERE ***"
         return self.food[x][y]
+    
         util.raiseNotDefined()
 
 def mazeDistance(point1: Tuple[int, int], point2: Tuple[int, int], gameState: pacman.GameState) -> int:
