@@ -168,11 +168,10 @@ def uniformCostSearch(problem: SearchProblem):
             return path
 
         # ถ้าเคยเจอ state นี้ด้วย cost ที่ดีกว่าหรือเท่ากันแล้ว
-        if current_state in visited and visited[current_state] <= cost_now:
+        if current_state not in visited or cost_now < visited[current_state]:
+            visited[current_state] = cost_now
+        else:
             continue
-
-        # บันทึก cost ที่ดีที่สุดของ state นี้
-        visited[current_state] = cost_now
 
         successors = problem.getSuccessors(current_state)
         for next_state, action, stepCost in successors:
@@ -183,7 +182,6 @@ def uniformCostSearch(problem: SearchProblem):
 
     # ถ้าไม่เจอ goal
     return []
-
 
     util.raiseNotDefined()
 
@@ -201,36 +199,34 @@ def aStarSearch(problem: SearchProblem, heuristic=nullHeuristic):
 
     fringe = PriorityQueue()
     bestCost = {}   # เก็บ cost ที่ดีที่สุดของแต่ละ state
-
     start = problem.getStartState()
-    start_h = heuristic(start, problem)
-
-    # (state, path, cost_now)
-    fringe.push((start, [], 0), start_h)
+    fringe.push((start, [], 0), 0)
 
     while not fringe.isEmpty():
-        state, path, cost_now = fringe.pop()
+        current_state, path, cost_now = fringe.pop()
 
-        # ถ้าเจอเป้าหมาย
-        if problem.isGoalState(state):
+        # ถ้าเจอ goal
+        if problem.isGoalState(current_state):
             return path
 
-        # ถ้าเคยมา state นี้ด้วย cost ที่ดีกว่าแล้ว
-        if state in bestCost and bestCost[state] <= cost_now:
+        # ถ้าเคยเจอ state นี้ด้วย cost ที่ดีกว่าหรือเท่ากันแล้ว
+        if current_state not in bestCost or cost_now < bestCost[current_state]:
+            bestCost[current_state] = cost_now
+        else:
             continue
 
-        bestCost[state] = cost_now
-
-        for next_state, action, stepCost in problem.getSuccessors(state):
+        successors = problem.getSuccessors(current_state)
+        for next_state, action, stepCost in successors:
             new_cost = cost_now + stepCost
             priority = new_cost + heuristic(next_state, problem)
-
             fringe.push(
                 (next_state, path + [action], new_cost),
                 priority
             )
 
+    # ถ้าไม่เจอ goal
     return []
+
     util.raiseNotDefined()
 
 
